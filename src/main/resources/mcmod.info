@@ -1,0 +1,8 @@
+[{
+  "modid": "MOD_ID",
+  "name": "MOD_NAME",
+  "version": "${mod_version}",
+  "mcversion": "MINECRAFT_VERSION",
+  "url": "MOD_URL",
+  "authorList": ["MOD_AUTHOR"]
+}]

@@ -1,0 +1,116 @@
+plugins {
+    id 'eclipse'
+    id 'net.minecraftforge.gradle' version "${forge_gradle_version}"
+    id 'org.spongepowered.mixin' version "${mixin_gradle_version}"
+}
+
+version = "${minecraft_version}-${mod_version}"
+group = "${mod_group}"
+archivesBaseName = "${mod_name}"
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(8)
+
+configurations {
+    atDependencies
+    implementation.extendsFrom(atDependencies)
+
+    includedDependencies
+    implementation.extendsFrom(includedDependencies)
+
+    buildDependencies
+}
+
+repositories {
+    flatDir { dirs 'libs' }
+
+    ivy {
+        url 'https://github.com/'
+
+        patternLayout {
+            artifact '[organisation]/[module]/releases/download/v[revision]/[module]-[revision].[ext]'
+        }
+
+        metadataSources { artifact() } 
+    }
+
+    repositories {
+        exclusiveContent {
+            forRepository {
+                maven {
+                    url "https://cursemaven.com"
+                }
+            }
+            filter {
+                includeGroup "curse.maven"
+            }
+        }
+    }
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    implementation "org.spongepowered:mixin:${mixin_version}"
+    annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
+
+    includedDependencies 'meldexun:ASMUtil:2.8.0@jar'
+}
+
+minecraft {
+    mappings channel: "${forge_mappings_channel}", version: "${forge_mappings_version}"
+
+    accessTransformer = files(
+        'src/main/resources/META-INF/MOD_ID_at.cfg',
+        files(configurations.atDependencies.collect { zipTree(it) }).getAsFileTree().matching {
+            
+        }
+    )
+
+    runs {
+        client {
+            taskName "runClient ${mod_name} ${minecraft_version}"
+            environment 'MC_VERSION', "${minecraft_version}"
+            property 'fml.coreMods.load', "${mod_plugin_class},${dependency_plugin_classes}"
+        }
+
+        server {
+            taskName "runServer ${mod_name} ${minecraft_version}"
+            environment 'MC_VERSION', "${minecraft_version}"
+            property 'fml.coreMods.load', "${mod_plugin_class},${dependency_plugin_classes}"
+        }
+    }
+}
+
+mixin {
+    add sourceSets.main, "mixins.${mod_id}.refmap.json"
+    config "mixins.${mod_id}.json"
+}
+
+processResources {
+    inputs.property 'mod_version', "${mod_version}"
+
+    filesMatching('mcmod.info') {
+        expand 'mod_version': "${mod_version}"
+    }
+}
+
+compileJava {
+    classpath = sourceSets.main.compileClasspath + configurations.buildDependencies
+}
+
+jar {
+    from {
+        configurations.includedDependencies.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+    manifest {
+        attributes 'FMLAT': 'accesstransformer.cfg'
+        attributes 'FMLCorePlugin': "${mod_plugin_class}"
+        attributes 'FMLCorePluginContainsFMLMod': 'true'
+        attributes 'ForceLoadAsMod': 'true'
+        attributes 'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker'
+        attributes 'TweakOrder': '0'
+        attributes 'MixinConfigs': "mixins.${mod_id}.json"
+    }
+}
+
+jar.finalizedBy('reobfJar')
