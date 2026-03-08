@@ -1,13 +1,13 @@
-package MOD_GROUP.asm.tweaker;
+package meldexun.parallelai.asm.tweaker;
 
 import java.io.File;
 import java.util.List;
 
-import MOD_GROUP.asm.MOD_NAMEClassTransformer;
+import meldexun.parallelai.asm.ParallelAIClassTransformer;
 import net.minecraft.launchwrapper.ITweaker;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 
-public class MOD_NAMETweaker implements ITweaker {
+public class ParallelAITweaker implements ITweaker {
 
 	@Override
 	public void acceptOptions(List<String> args, File gameDir, File assetsDir, String profile) {
@@ -16,7 +16,7 @@ public class MOD_NAMETweaker implements ITweaker {
 
 	@Override
 	public void injectIntoClassLoader(LaunchClassLoader classLoader) {
-		classLoader.registerTransformer(MOD_NAMEClassTransformer.class.getName());
+		classLoader.registerTransformer(ParallelAIClassTransformer.class.getName());
 	}
 
 	@Override

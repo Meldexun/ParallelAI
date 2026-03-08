@@ -1,4 +1,4 @@
-package MOD_GROUP.asm;
+package meldexun.parallelai.asm;
 
 import java.lang.reflect.Field;
 
@@ -13,7 +13,7 @@ import meldexun.asmutil2.reader.ClassUtil;
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.launchwrapper.Launch;
 
-public class MOD_NAMEClassTransformer extends HashMapClassNodeClassTransformer implements IClassTransformer {
+public class ParallelAIClassTransformer extends HashMapClassNodeClassTransformer implements IClassTransformer {
 
 	private static final ClassUtil REMAPPING_CLASS_UTIL;
 	static {

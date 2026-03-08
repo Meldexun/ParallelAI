@@ -1,9 +1,9 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "MOD_GROUP.mixin",
+  "package": "meldexun.parallelai.mixin",
   "compatibilityLevel": "JAVA_8",
-  "refmap": "mixins.MOD_ID.refmap.json",
+  "refmap": "mixins.parallelai.refmap.json",
   "mixins": [
   ],
   "injectors": {

@@ -1,4 +1,4 @@
-package MOD_GROUP.asm.util;
+package meldexun.parallelai.asm.util;
 
 import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
