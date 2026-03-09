@@ -11,4 +11,11 @@ public class ParallelAI {
 	public static final String parallelai = "parallelai";
 	public static final Logger LOGGER = LogManager.getLogger(parallelai);
 
+	public enum TickStage {
+		PRE,
+		AI,
+		POST,
+		ALL;
+	}
+
 }
