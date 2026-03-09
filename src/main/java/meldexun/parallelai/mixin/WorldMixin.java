@@ -51,12 +51,12 @@ public abstract class WorldMixin implements Supplier<TickStage> {
 		return tickStage;
 	}
 
-	@Redirect(method = "updateEntities", at = @At(value = "INVOKE", target = "size"))
+	@Redirect(method = "updateEntities", at = @At(value = "INVOKE", target = "Ljava/util/List;size()I"))
 	private int cancelEntityTicking(List<Entity> loadedEntityList) {
 		return 0;
 	}
 
-	@Inject(method = "updateEntities", at = @At(value = "INVOKE_STRING", target = "endStartSection(Ljava/lang/String;)V", args = "ldc=regular", shift = Shift.AFTER))
+	@Inject(method = "updateEntities", at = @At(value = "INVOKE_STRING", target = "Lnet/minecraft/profiler/Profiler;endStartSection(Ljava/lang/String;)V", args = "ldc=regular", shift = Shift.AFTER))
 	private void tickEntitiesParallel(CallbackInfo info) {
 		// handle dismounting synchronously
 		for (Entity entity : this.loadedEntityList) {
@@ -218,7 +218,7 @@ public abstract class WorldMixin implements Supplier<TickStage> {
 		});
 	}
 
-	@Shadow
+	@Shadow(remap = false)
 	public abstract ImmutableSetMultimap<ChunkPos, ForgeChunkManager.Ticket> getPersistentChunks();
 
 	@Shadow
